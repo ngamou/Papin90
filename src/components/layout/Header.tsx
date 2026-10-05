@@ -59,11 +59,13 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navItems = [
     { id: 'whatsapp', label: 'WhatsApp Flows', icon: MessageCircle },
-    { id: 'patient_pwa', label: 'Portail Patient', icon: Globe },
+    {
+      id: 'patient_pwa',
+      label: activePatient ? `Compte Patient (${activePatient.name.split(' ')[0]})` : 'Compte Patient',
+      icon: User,
+    },
     { id: 'agenda', label: 'Agenda Médecin', icon: Calendar },
     { id: 'kanban', label: 'Salle d’Attente & Tri', icon: Layers },
-    { id: 'cash_desk', label: 'Caisse & Stocks', icon: CreditCard },
-    { id: 'analytics', label: 'Analytique & ROI', icon: BarChart3 },
     ...(isAdminAuthenticated && currentTab === 'admin'
       ? [{ id: 'admin', label: 'Console Admin (2FA)', icon: ShieldCheck }]
       : []),
@@ -204,9 +206,9 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Patient & Doctor Account Access / Badge */}
           {activePatient ? (
             <button
-              onClick={() => onOpenUserAuth('patient')}
+              onClick={() => onTabChange('patient_pwa')}
               className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-semibold rounded-md border border-teal-300 bg-teal-50 text-teal-800 hover:bg-teal-100 transition shadow-2xs"
-              title="Mon Carnet de Santé Patient (DoualaSanté)"
+              title="Accéder à Mon Compte Patient & Carnet de Santé"
             >
               <User className="w-3.5 h-3.5 text-teal-600 shrink-0" />
               <span className="hidden md:inline max-w-[110px] truncate">{activePatient.name}</span>

@@ -1,7 +1,6 @@
-import React from 'react';
 import {
   MessageCircle,
-  Globe,
+  User,
   Calendar,
   Layers,
   CreditCard,
@@ -22,21 +21,22 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 }) => {
   const tabs = [
     { id: 'whatsapp', label: 'WhatsApp', shortLabel: 'WA', icon: MessageCircle },
-    { id: 'patient_pwa', label: 'Patient', shortLabel: 'Patient', icon: Globe },
+    { id: 'patient_pwa', label: 'Compte', shortLabel: 'Compte', icon: User },
     { id: 'agenda', label: 'Agenda', shortLabel: 'Agenda', icon: Calendar },
     { id: 'kanban', label: 'Attente', shortLabel: 'Attente', icon: Layers },
-    { id: 'cash_desk', label: 'Caisse', shortLabel: 'Caisse', icon: CreditCard },
     ...(isAdminAuthenticated && currentTab === 'admin'
       ? [{ id: 'admin', label: 'Admin', shortLabel: 'Admin', icon: ShieldCheck }]
-      : [{ id: 'analytics', label: 'Stats', shortLabel: 'Stats', icon: BarChart3 }]),
+      : []),
   ];
+
+  const gridColsClass = tabs.length === 5 ? 'grid-cols-5' : 'grid-cols-4';
 
   return (
     <nav
       aria-label="Navigation mobile et tablette en pied de page"
       className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] pb-[env(safe-area-inset-bottom)]"
     >
-      <div className="grid grid-cols-6 h-14 sm:h-16 max-w-lg sm:max-w-2xl mx-auto px-1 sm:px-3">
+      <div className={`grid ${gridColsClass} h-14 sm:h-16 max-w-lg sm:max-w-2xl mx-auto px-1 sm:px-3`}>
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;

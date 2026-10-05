@@ -9,9 +9,6 @@ import { PatientWhatsAppView } from './components/patient/PatientWhatsAppView';
 import { PatientPWAView } from './components/patient/PatientPWAView';
 import { PractitionerAgenda } from './components/practitioner/PractitionerAgenda';
 import { WaitingRoomKanban } from './components/practitioner/WaitingRoomKanban';
-import { CashDeskAndBilling } from './components/admin/CashDeskAndBilling';
-import { MedicalStockManagement } from './components/admin/MedicalStockManagement';
-import { ClinicAnalytics } from './components/analytics/ClinicAnalytics';
 import { RegulatoryComplianceModal } from './components/compliance/RegulatoryComplianceModal';
 import { DigitalPrescriptionModal } from './components/practitioner/DigitalPrescriptionModal';
 import { TeleconsultationModal } from './components/practitioner/TeleconsultationModal';
@@ -23,7 +20,7 @@ import { Language, Appointment, AdminUser } from './types';
 import { getBrowserLanguage } from './i18n/translations';
 import { db } from './services/db';
 import { adminApi } from './services/adminApi';
-import { CreditCard, Package, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('whatsapp');
@@ -33,7 +30,6 @@ export default function App() {
   const [isUserAuthModalOpen, setIsUserAuthModalOpen] = useState(false);
   const [userAuthRole, setUserAuthRole] = useState<'patient' | 'doctor'>('patient');
   const [adminUser, setAdminUser] = useState<AdminUser | null>(adminApi.getCurrentUser());
-  const [adminSubTab, setAdminSubTab] = useState<'cash' | 'stock'>('cash');
 
   // Active appointment for modals
   const [activeAppointmentForPrescription, setActiveAppointmentForPrescription] = useState<Appointment | null>(null);
@@ -80,7 +76,7 @@ export default function App() {
   };
 
   const handleTabChange = (tab: string) => {
-    if (tab === 'admin') {
+    if (tab === 'cash_desk' || tab === 'analytics' || tab === 'admin') {
       if (!adminUser) {
         setIsAdminAuthModalOpen(true);
         return;
@@ -88,6 +84,8 @@ export default function App() {
       if (window.location.pathname !== '/admin') {
         window.history.pushState(null, '', '/admin');
       }
+      setCurrentTab('admin');
+      return;
     } else {
       if (window.location.pathname === '/admin') {
         window.history.pushState(null, '', '/');
@@ -145,40 +143,6 @@ export default function App() {
         )}
 
         {currentTab === 'kanban' && <WaitingRoomKanban />}
-
-        {currentTab === 'cash_desk' && (
-          <div>
-            {/* Sub navigation between Caisse SYSCOHADA and Stock Consommables */}
-            <div className="max-w-7xl mx-auto px-4 pt-4 flex flex-wrap sm:flex-nowrap items-center gap-2">
-              <button
-                onClick={() => setAdminSubTab('cash')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition ${
-                  adminSubTab === 'cash'
-                    ? 'bg-teal-600 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <CreditCard className="w-3.5 h-3.5" />
-                <span>Caisse Multi-Canaux & SYSCOHADA</span>
-              </button>
-              <button
-                onClick={() => setAdminSubTab('stock')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition ${
-                  adminSubTab === 'stock'
-                    ? 'bg-teal-600 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <Package className="w-3.5 h-3.5" />
-                <span>Stock Consommables Médicaux</span>
-              </button>
-            </div>
-
-            {adminSubTab === 'cash' ? <CashDeskAndBilling /> : <MedicalStockManagement />}
-          </div>
-        )}
-
-        {currentTab === 'analytics' && <ClinicAnalytics />}
 
         {currentTab === 'admin' && adminUser && (
           <AdminPortalView
