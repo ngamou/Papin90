@@ -1,0 +1,8 @@
+{
+  "name": "DoualaSanté - Rendez-vous & Urgences Médicales",
+  "description": "Plateforme médicale offline-first pour cliniques et spécialistes à Douala, Cameroun. Réservation WhatsApp Flows, paiements MTN MoMo & Orange Money, file d'attente intelligente et conformité Loi 2024/017.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
